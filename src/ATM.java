@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import java.awt.GridLayout;
+import javax.swing.SwingConstants;
 
 public class ATM extends JFrame {
  static final long serialVersionUID = 1L;
@@ -23,39 +25,34 @@ public class ATM extends JFrame {
 	private int attempts = 0;
 	private Scanner in = null;
 	private Account user = null;
-
+	
 	public ATM() {
 		super("ATM Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(500,300,600,360);
+		setBounds(400, 400, 650, 300);
 		//setSize(600,400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		contentPane.setLayout(new GridLayout(3, 0));
 		
 		JLabel accountNumberLabel = new JLabel("Account Number:");
-		accountNumberLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-		accountNumberLabel.setBounds(75, 75, 160, 20);
+		accountNumberLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		contentPane.add(accountNumberLabel);
 		
-		JLabel passwordLabel = new JLabel("Password:");
-		passwordLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-		passwordLabel.setBounds(138, 120, 100, 20);
-		contentPane.add(passwordLabel);
-		
 		accountNumberTextField = new JTextField();
-		accountNumberTextField.setBounds(250, 73, 250, 30);
 		contentPane.add(accountNumberTextField);
 		accountNumberTextField.setColumns(10);
 		
+		JLabel passwordLabel = new JLabel("Password:");
+		passwordLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		contentPane.add(passwordLabel);
+		
 		passwordField = new JPasswordField();
-		passwordField.setBounds(250, 117, 250, 30);
 		contentPane.add(passwordField);
 		passwordField.setColumns(10);
 		
 		JButton LoginButton = new JButton("Login");
-		LoginButton.setFont(new Font("Arial", Font.PLAIN, 20));
 		LoginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
@@ -76,7 +73,9 @@ public class ATM extends JFrame {
 				}
 			}
 		});
-		LoginButton.setBounds(315, 160, 120, 50);
+		
+		JLabel label = new JLabel("");
+		contentPane.add(label);
 		contentPane.add(LoginButton);
 	}
 	
