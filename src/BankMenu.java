@@ -1,7 +1,5 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,6 +19,7 @@ import javax.swing.SwingConstants;
 
 
 public class BankMenu extends JFrame {
+	//declaring variable
 	Account user;
 	JTabbedPane tabbedPane;
 	JPanel depositP, withdrawP, checkBalanceP, transferP, changePasswordP, logOutP;
@@ -30,8 +29,10 @@ public class BankMenu extends JFrame {
 		setBounds(400, 400, 650, 300);
 		setBackground(Color.gray);
 
+		//define variable user
 		this.user = user;
 		
+		//main pane
 		JPanel topPanel = new JPanel();
 		topPanel.setLayout( new BorderLayout() );
 		getContentPane().add( topPanel );
@@ -57,13 +58,15 @@ public class BankMenu extends JFrame {
 	}
 
 	private void createDepositP() {
-		// TODO Auto-generated method stub
+		//define deposit pane
 		depositP = new JPanel();
 		depositP.setLayout(new GridLayout(2,1));
 		
+		//declare and define depositTextField to store the amount to be deposit
 		final JTextField depositTextField = new JTextField("Enter the amount you wish to deposit");
 		depositP.add(depositTextField);
 		
+		//deposit the amount entered
 		JButton depositButton = new JButton("Deposit");
 		depositButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -80,12 +83,15 @@ public class BankMenu extends JFrame {
 	}
 	
 	private void createWithdrawP() {
+		//define withdraw pane
 		withdrawP = new JPanel();
 		withdrawP.setLayout(new GridLayout(2,1));
 
+		//declare and define withdrawTextField to store the amount to be withdraw
 		final JTextField withdrawTextField = new JTextField("Enter the amount you wish to withdraw.");
 		withdrawP.add(withdrawTextField);
 		
+		//withdraw the amount entered
 		JButton withdrawButton = new JButton("Withdraw");
 		withdrawButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -102,19 +108,32 @@ public class BankMenu extends JFrame {
 	}
 	
 	private void createCheckBalanceP() {
+		//define checkBalance pane
 		checkBalanceP = new JPanel();
-		checkBalanceP.setLayout(new GridLayout(1,1));
+		checkBalanceP.setLayout(new GridLayout(2,1));
 		
-		JLabel balance = new JLabel();
+		//show current balance
+		final JLabel balance = new JLabel();
 		balance.setHorizontalAlignment(SwingConstants.CENTER);
 		balance.setText(String.format("Current balance $:%d",user.getBalance()));
 		checkBalanceP.add(balance);
+
+		//refresh to make sure the balance is up to date
+		JButton refresh = new JButton("Refresh balance");
+		refresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				balance.setText(String.format("Current balance $:%d",user.getBalance()));
+			}
+		});
+		checkBalanceP.add(refresh);
 	}
 
 	private void createTransferP() {
+		//define transfer pane
 		transferP = new JPanel();
 		transferP.setLayout(new GridLayout(3,2));
 		
+		//define and declare both label and textField to store transfer information
 		JLabel recipientAccountNumberLabel = new JLabel("Recipient account number:");
 		recipientAccountNumberLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		transferP.add(recipientAccountNumberLabel);
@@ -133,6 +152,7 @@ public class BankMenu extends JFrame {
 
 		transferP.add(new JLabel(""));
 
+		//perform the transfer if everything passes all the checks
 		JButton doneButton = new JButton("Done");
 		doneButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent x) {
@@ -151,9 +171,11 @@ public class BankMenu extends JFrame {
 	}
 	
 	private void createChangePasswordP() {
+		//define changePassword pane
 		changePasswordP = new JPanel();
 		changePasswordP.setLayout(new GridLayout(4,2));
 		
+		//define and declare label and passworldField to store information for password change
 		final JLabel oldPassLabel = new JLabel("old password:");
 		oldPassLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		changePasswordP.add(oldPassLabel);
@@ -177,6 +199,7 @@ public class BankMenu extends JFrame {
 		
 		changePasswordP.add(new JLabel(""));
 		
+		//perform the password change if all the checks passes
 		JButton doneButton = new JButton("Done");
 		doneButton.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
@@ -187,13 +210,19 @@ public class BankMenu extends JFrame {
 					in = new Scanner(new File("Password.txt"));
 					String temp = in.next();
 					final String password = in.next();
+					
+					//check to make sure none of the field are empty
 					if(oldPassField.getText().equals("") || newPassField.getText().equals("") || newPassField2.getText().equals(""))
 						JOptionPane.showMessageDialog(null, "All field must be fill in!", "Error!", JOptionPane.ERROR_MESSAGE);
 					else {
+						//check to make sure the password is same as the password form Password.txt
 						if(oldPassField.getText().equals(password)) {
+							//check to make sure old password can not be the same as new password
 							if(oldPassField.getText().equals(newPassField.getText())){
 								JOptionPane.showMessageDialog(null, "Old password is aame as New password!", "Error!", JOptionPane.ERROR_MESSAGE);
-							} else if(newPassField.getText().equals(newPassField2.getText())) {
+							}
+							// check to make sure the new password matches and save it to Password.txt
+							else if(newPassField.getText().equals(newPassField2.getText())) {
 								if(in != null)
 									in.close();
 								out = new PrintWriter(new File("Password.txt"));
@@ -210,6 +239,7 @@ public class BankMenu extends JFrame {
 				} catch(Exception e) {
 					JOptionPane.showMessageDialog(null, e.getMessage(), "Error!", JOptionPane.ERROR_MESSAGE);
 				} finally {
+					//closing the input and output stream
 					if(in != null)
 						in.close();
 					if(out != null)
@@ -221,10 +251,17 @@ public class BankMenu extends JFrame {
 	}
 	
 	private void createLogOutP() {
+		//define logOut pane
 		logOutP = new JPanel();
 		logOutP.setLayout(new GridLayout(1,1));
 		
+		//logOut of ATM when click
 		JButton logOut = new JButton("Logout");
+		logOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
 		logOutP.add(logOut);
 	}
 }

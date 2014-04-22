@@ -1,4 +1,4 @@
-import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -13,12 +13,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
-import java.awt.GridLayout;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 public class ATM extends JFrame {
- static final long serialVersionUID = 1L;
+	//declare ATM attribute
+	static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField accountNumberTextField;
 	private JPasswordField passwordField;
@@ -30,12 +30,13 @@ public class ATM extends JFrame {
 		super("ATM Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(400, 400, 650, 300);
-		//setSize(600,400);
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new GridLayout(3, 0));
 		
+		//declare and defining labels and textFields
 		JLabel accountNumberLabel = new JLabel("Account Number:");
 		accountNumberLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		contentPane.add(accountNumberLabel);
@@ -52,16 +53,24 @@ public class ATM extends JFrame {
 		contentPane.add(passwordField);
 		passwordField.setColumns(10);
 		
+		//Log user into the bank account if accountNumber and password are correct
 		JButton LoginButton = new JButton("Login");
 		LoginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
+					//logInCheck() is use to verify login information
 					if(logInCheck()) {
+						//retrieve the user information from AccountInformation.txt and define Account user 
 						getAccountInfo();
+						
+						//check to make sure the user have ATM access
 						if(user.isAtmAccessible()) {
+							//create the BankMenu frame
 							BankMenu frame = new BankMenu(user);
 							frame.setVisible(true);
 							frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+							
+							//clear out ATM frame
 							dispose();
 						} else						
 							JOptionPane.showMessageDialog(null, "Sorry you do not have ATM access.", "Not accessible!", JOptionPane.WARNING_MESSAGE);						
@@ -80,16 +89,23 @@ public class ATM extends JFrame {
 	}
 	
 	public boolean logInCheck() throws IOException, NumberFormatException {
+		//define scanner to use to read data from Password.txt
 		in = new Scanner(new File("Password.txt"));
+		
+		//declare variable to store information read from Password.txt
 		int accountNumber = 0;
 		String password = null;
 		
+		//read in accountNumber
 		if(in.hasNext()) {
 			accountNumber = Integer.parseInt((String) in.next());
+			//read in password
 			if(in.hasNext())
 				password = (String) in.next();
 		}
 		
+		//check to make sure there is still remaining attempts and check both accountNumber and password
+		//otherwise, increase attempt accordingly
 		if(attempts < 3 && password.equals(passwordField.getText()) == true && accountNumber == Integer.parseInt(accountNumberTextField.getText())) {
 			in.close();
 			return true;
@@ -106,14 +122,18 @@ public class ATM extends JFrame {
 	}
 	
 	public void getAccountInfo() throws FileNotFoundException, NumberFormatException {
+		//define scanner to use to read data from AccountInformation.txt
 		in = new Scanner(new File("AccountInformation.txt"));
 		
+		//read in and store them in different variable
 		int accountNumber = Integer.parseInt((String) in.nextLine());
 		String lastName = (String) in.nextLine();
 		String firstName = (String) in.nextLine();
 		int balance = Integer.parseInt((String) in.nextLine());
 		
 		boolean accessible = false;
+		
+		//user String temp to store ATM access status and define it to accessible accordingly
 		String temp = in.nextLine();
 		if((temp.toLowerCase()).equals("active"))
 			accessible = true;
@@ -121,6 +141,8 @@ public class ATM extends JFrame {
 			accessible = false;
 		else
 			accessible = false;
+		
+		//define user
 		user = new Account(accountNumber, lastName, firstName, balance, accessible);
 		in.close();
 	}
