@@ -73,6 +73,7 @@ public class BankMenu extends JFrame {
 				try {
 					String amount = depositTextField.getText();
 					user.deposit(Integer.parseInt(amount));
+					depositTextField.setText("success");
 				} catch(Exception e) {
 					if(!e.getMessage().equals("null"))
 						JOptionPane.showMessageDialog(null, e.getMessage(), "Error!", JOptionPane.ERROR_MESSAGE);
@@ -98,6 +99,7 @@ public class BankMenu extends JFrame {
 				try {
 					String amount = withdrawTextField.getText();
 					user.withdraw(Integer.parseInt(amount));
+					withdrawTextField.setText("success");
 				} catch(Exception e) {
 					if(!e.getMessage().equals("null"))
 						JOptionPane.showMessageDialog(null, e.getMessage(), "Error!", JOptionPane.ERROR_MESSAGE);
@@ -159,7 +161,6 @@ public class BankMenu extends JFrame {
 				try {
 					int accountNumber = Integer.parseInt(accountNumberTextField.getText());
 					int amount = Integer.parseInt(amountTextField.getText());
-					dispose();
 					user.transfer(accountNumber, amount);
 				} catch(Exception e) {
 					if(!e.getMessage().equals("null"))
@@ -219,7 +220,7 @@ public class BankMenu extends JFrame {
 						if(oldPassField.getText().equals(password)) {
 							//check to make sure old password can not be the same as new password
 							if(oldPassField.getText().equals(newPassField.getText())){
-								JOptionPane.showMessageDialog(null, "Old password is aame as New password!", "Error!", JOptionPane.ERROR_MESSAGE);
+								JOptionPane.showMessageDialog(null, "Old password is same as New password!", "Error!", JOptionPane.ERROR_MESSAGE);
 							}
 							// check to make sure the new password matches and save it to Password.txt
 							else if(newPassField.getText().equals(newPassField2.getText())) {
@@ -235,7 +236,6 @@ public class BankMenu extends JFrame {
 							JOptionPane.showMessageDialog(null, "Old password is wrong!", "Error!", JOptionPane.ERROR_MESSAGE);
 						
 					}
-					dispose();
 				} catch(Exception e) {
 					JOptionPane.showMessageDialog(null, e.getMessage(), "Error!", JOptionPane.ERROR_MESSAGE);
 				} finally {
@@ -259,6 +259,17 @@ public class BankMenu extends JFrame {
 		JButton logOut = new JButton("Logout");
 		logOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				//output to AccountInformation.txt after all transaction have been completed
+				PrintWriter out = null;
+				try {
+					out = new PrintWriter(new File("AccountInformation.txt"));
+					out.println(user);
+				} catch(Exception e) {
+					e.printStackTrace();
+				} finally {
+					if(out != null)
+						out.close();
+				}
 				System.exit(0);
 			}
 		});

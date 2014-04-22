@@ -37,6 +37,13 @@ public class Account {
 		return atmAccessible;
 	}
 	
+	public String isAtmAccessibleString() {
+		if(isAtmAccessible())
+			return "Active";
+		else
+			return "Disable";
+	}
+	
 	public void withdraw(int amount) {
 		//check to make sure the amount is positive and there is sufficient fund in the account
 		if(amount < 0)
@@ -65,5 +72,9 @@ public class Account {
 			balance -= amount;
 			JOptionPane.showMessageDialog(null, "You have successfully transfered $" + amount + " to this account number: " + transferAccountNumber + '.', "Success!", JOptionPane.PLAIN_MESSAGE);
 		}
+	}
+	
+	public String toString() {
+		return String.format("%d\n%s\n%s\n%d\n%s", getAccountNumber(), getLastName(), getFirstName(), getBalance(), isAtmAccessibleString());
 	}
 }

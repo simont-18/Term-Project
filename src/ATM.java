@@ -68,7 +68,7 @@ public class ATM extends JFrame {
 							//create the BankMenu frame
 							BankMenu frame = new BankMenu(user);
 							frame.setVisible(true);
-							frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+							frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 							
 							//clear out ATM frame
 							dispose();
