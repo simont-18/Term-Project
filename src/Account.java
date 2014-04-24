@@ -1,6 +1,5 @@
 import javax.swing.JOptionPane;
 
-
 public class Account {
 	//declaring variable to store Account attribute
 	private int accountNumber, balance;

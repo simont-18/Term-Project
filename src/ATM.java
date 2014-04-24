@@ -24,7 +24,7 @@ public class ATM extends JFrame {
 	private JPasswordField passwordField;
 	private int attempts = 0;
 	private Scanner in = null;
-	private Account user = null;
+	private Account user;
 	
 	public ATM() {
 		super("ATM Login");

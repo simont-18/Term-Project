@@ -17,12 +17,13 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-
 public class BankMenu extends JFrame {
+	private static final long serialVersionUID = 1L;
 	//declaring variable
 	Account user;
 	JTabbedPane tabbedPane;
-	JPanel depositP, withdrawP, checkBalanceP, transferP, changePasswordP, logOutP;
+	JPanel depositP, withdrawP, checkBalanceP, transferP, changePasswordP, exitP;
+	JLabel balance;
 
 	public BankMenu(Account user) {
 		super("Bank Menu");
@@ -43,7 +44,7 @@ public class BankMenu extends JFrame {
 		createCheckBalanceP();
 		createTransferP();
 		createChangePasswordP();
-		createLogOutP();
+		createExitP();
 
 		// Create a tabbed pane
 		tabbedPane = new JTabbedPane();
@@ -52,9 +53,9 @@ public class BankMenu extends JFrame {
 		tabbedPane.addTab("Check balance", checkBalanceP);
 		tabbedPane.addTab("Transfer Money", transferP);
 		tabbedPane.addTab("Change Password", changePasswordP);
-		tabbedPane.addTab("LogOut", logOutP);
+		tabbedPane.addTab("Exit (Logout)", exitP);
 
-		topPanel.add( tabbedPane, BorderLayout.CENTER );
+		topPanel.add(tabbedPane, BorderLayout.CENTER);
 	}
 
 	private void createDepositP() {
@@ -74,6 +75,7 @@ public class BankMenu extends JFrame {
 					String amount = depositTextField.getText();
 					user.deposit(Integer.parseInt(amount));
 					depositTextField.setText("success");
+					balance.setText(String.format("Current balance $:%d",user.getBalance()));
 				} catch(Exception e) {
 					if(!e.getMessage().equals("null"))
 						JOptionPane.showMessageDialog(null, e.getMessage(), "Error!", JOptionPane.ERROR_MESSAGE);
@@ -100,6 +102,7 @@ public class BankMenu extends JFrame {
 					String amount = withdrawTextField.getText();
 					user.withdraw(Integer.parseInt(amount));
 					withdrawTextField.setText("success");
+					balance.setText(String.format("Current balance $:%d",user.getBalance()));
 				} catch(Exception e) {
 					if(!e.getMessage().equals("null"))
 						JOptionPane.showMessageDialog(null, e.getMessage(), "Error!", JOptionPane.ERROR_MESSAGE);
@@ -112,22 +115,14 @@ public class BankMenu extends JFrame {
 	private void createCheckBalanceP() {
 		//define checkBalance pane
 		checkBalanceP = new JPanel();
-		checkBalanceP.setLayout(new GridLayout(2,1));
+		checkBalanceP.setLayout(new GridLayout(1,1));
 		
 		//show current balance
-		final JLabel balance = new JLabel();
+		balance = new JLabel();
 		balance.setHorizontalAlignment(SwingConstants.CENTER);
 		balance.setText(String.format("Current balance $:%d",user.getBalance()));
 		checkBalanceP.add(balance);
 
-		//refresh to make sure the balance is up to date
-		JButton refresh = new JButton("Refresh balance");
-		refresh.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				balance.setText(String.format("Current balance $:%d",user.getBalance()));
-			}
-		});
-		checkBalanceP.add(refresh);
 	}
 
 	private void createTransferP() {
@@ -250,14 +245,14 @@ public class BankMenu extends JFrame {
 		changePasswordP.add(doneButton);
 	}
 	
-	private void createLogOutP() {
-		//define logOut pane
-		logOutP = new JPanel();
-		logOutP.setLayout(new GridLayout(1,1));
+	private void createExitP() {
+		//define exit pane
+		exitP = new JPanel();
+		exitP.setLayout(new GridLayout(1,1));
 		
-		//logOut of ATM when click
-		JButton logOut = new JButton("Logout");
-		logOut.addActionListener(new ActionListener() {
+		//exit of ATM when click
+		JButton exit = new JButton("Exit (Logout)");
+		exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//output to AccountInformation.txt after all transaction have been completed
 				PrintWriter out = null;
@@ -267,12 +262,13 @@ public class BankMenu extends JFrame {
 				} catch(Exception e) {
 					e.printStackTrace();
 				} finally {
+					//closing stream
 					if(out != null)
 						out.close();
 				}
 				System.exit(0);
 			}
 		});
-		logOutP.add(logOut);
+		exitP.add(exit);
 	}
 }
